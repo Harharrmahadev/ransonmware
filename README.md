@@ -1,6 +1,10 @@
 # ransonmware
 This program encrypt and decrypt files inside directories
 
+First install required module
+
+      pip install requirements.txt
+
 step 1: run server.py file in attacker machine
 
       python server.py
