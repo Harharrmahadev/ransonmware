@@ -2,9 +2,11 @@
 This program encrypt and decrypt files inside directories
 
 step 1: run server.py file in attacker machine
+
       python server.py
 
 step 2: run ransomeware.py in victim machine
+
       python ransomeware.py
 
 
